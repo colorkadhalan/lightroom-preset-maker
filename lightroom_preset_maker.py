@@ -70,6 +70,8 @@ class App:
         else:
             exp = (r_mean_lum - s_mean_lum) / 50.0
         # Enhanced contrast with tonal range analysis        s_std = np.std(s_lab[:,:,0])
+        r_std = np.std(r_lab[:,:,0])
+        s_std = np.std(s_lab[:,:,0])
                 # Calculate tonal range (dynamic range)
         r_range = np.percentile(r_lab[:,:,0], 95) - np.percentile(r_lab[:,:,0], 5)
         s_range = np.percentile(s_lab[:,:,0], 95) - np.percentile(s_lab[:,:,0], 5)
