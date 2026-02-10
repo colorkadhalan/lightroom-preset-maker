@@ -337,7 +337,9 @@ class App:
      crs:SplitToningBalance="{m["SplitToningBalance"]}">
      <crs:ToneCurvePV2012>
                      <rdf:Seq>
-                {tone_points_str}      </rdf:Seq>
+                {tone_points_str}
+                                </rdf:Seq>
+                                            </crs:ToneCurvePV2012>
   </rdf:Description>
  </rdf:RDF>
 </x:xmpmeta>"""
