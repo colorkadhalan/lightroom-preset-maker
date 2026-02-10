@@ -13,21 +13,21 @@ class App:
         self.root.configure(bg='#1e1e1e')
         self.ref_img = None
         self.src_img = None
-        
+
         tk.Label(root, text="Lightroom Style Matcher", fg="#4db8ff", bg="#1e1e1e", font=("Segoe UI", 24, "bold")).pack(pady=20)
         frame = tk.Frame(root, bg="#1e1e1e")
         frame.pack(pady=10)
-        
+
         self.ref_box = tk.Label(frame, text="Ref Image (Style to Match)", bg="#2d2d2d", fg="#888", width=40, height=15, relief="flat")
         self.ref_box.grid(row=0, column=0, padx=20)
         tk.Button(frame, text="Select Reference", command=self.set_ref, bg="#444", fg="white", relief="flat", padx=10).grid(row=1, column=0, pady=10)
-        
+
         self.src_box = tk.Label(frame, text="Source Image (To be Edited)", bg="#2d2d2d", fg="#888", width=40, height=15, relief="flat")
         self.src_box.grid(row=0, column=1, padx=20)
         tk.Button(frame, text="Select Source", command=self.set_src, bg="#444", fg="white", relief="flat", padx=10).grid(row=1, column=1, pady=10)
-        
+
         tk.Button(root, text="GENERATE .XMP PRESET", command=self.run, bg="#28a745", fg="white", font=("Segoe UI", 14, "bold"), relief="flat", padx=30, pady=10).pack(pady=30)
-        
+
         self.log = scrolledtext.ScrolledText(root, height=8, bg="#121212", fg="#00ff00", font=("Consolas", 10))
         self.log.pack(fill="x", padx=40)
         self.log.insert("end", "System Ready.")
@@ -72,28 +72,28 @@ class App:
  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about=""
     xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
-   crs:PresetType="Normal"
-   crs:Cluster=""
-   crs:UUID="{os.urandom(16).hex().upper()}"
-   crs:SupportsAmount="True"
-   crs:SupportsColor="True"
-   crs:SupportsMonochrome="True"
-   crs:SupportsHighDynamicRange="True"
-   crs:SupportsNormalDynamicRange="True"
-   crs:SupportsSceneReferred="True"
-   crs:SupportsOutputReferred="True"
-   crs:CameraConfig="Camera v2"
-   crs:HasSettings="True"
-   crs:Exposure2012="{m["Exposure2012"]}"
-   crs:Contrast2012="{m["Contrast2012"]}"
-   crs:Highlights2012="0"
-   crs:Shadows2012="0"
-   crs:Whites2012="0"
-   crs:Blacks2012="0"
-   crs:Temperature="{m["Temperature"]}"
-   crs:Tint="{m["Tint"]}"
-   crs:HasCrop="False"
-   crs:AlreadyApplied="True">
+    crs:PresetType="Normal"
+    crs:Cluster=""
+    crs:UUID="{os.urandom(16).hex().upper()}"
+    crs:SupportsAmount="True"
+    crs:SupportsColor="True"
+    crs:SupportsMonochrome="True"
+    crs:SupportsHighDynamicRange="True"
+    crs:SupportsNormalDynamicRange="True"
+    crs:SupportsSceneReferred="True"
+    crs:SupportsOutputReferred="True"
+    crs:CameraConfig="Camera v2"
+    crs:HasSettings="True"
+    crs:Exposure2012="{m["Exposure2012"]}"
+    crs:Contrast2012="{m["Contrast2012"]}"
+    crs:Highlights2012="0"
+    crs:Shadows2012="0"
+    crs:Whites2012="0"
+    crs:Blacks2012="0"
+    crs:Temperature="{m["Temperature"]}"
+    crs:Tint="{m["Tint"]}"
+    crs:HasCrop="False"
+    crs:AlreadyApplied="True">
    <crs:Name>
     <rdf:Alt>
      <rdf:li xml:lang="x-default">Matched Style</rdf:li>
@@ -110,13 +110,11 @@ class App:
             path = filedialog.asksaveasfilename(defaultextension=".xmp", filetypes=[("XMP files", "*.xmp")])
             if path:
                 with open(path, "wb") as f:
-                    f.write(b'\\xef\\xbb\\xbf') # UTF-8 BOM
-                    f.write(b'<?xpacket begin="\\ufeff" id="W5M0MpCehiHzreSzNTczkc9d"?>\
-')
+                    f.write(b'\xef\xbb\xbf')  # UTF-8 BOM
+                    f.write(b'<?xpacket begin="\xef\xbb\xbf" id="W5M0MpCehiHzreSzNTczkc9d"?>\n')
                     f.write(xmp_content.encode("utf-8"))
-                    f.write(b'\
-<?xpacket end="w"?>')
-                self.log.insert("end", f"Saved: {path}")
+                    f.write(b'\n<?xpacket end="w"?>')
+                self.log.insert("end", f"\nSaved: {path}")
                 messagebox.showinfo("Success", "Preset saved successfully!")
         except Exception as e:
             messagebox.showerror("Error", str(e))
