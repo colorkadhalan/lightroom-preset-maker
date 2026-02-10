@@ -314,7 +314,7 @@ Add missing Fuji film preset parameters    crs:RedPrimarySat="{cal["RedSat"]}"
     crs:GreenPrimaryHue="{cal["GreenHue"]}"
     crs:GreenPrimarySat="{cal["GreenSat"]}"
     crs:BluePrimaryHue="{cal["BlueHue"]}"
-    crs:BluePrimarySat="{cal["BlueSat"]}">
+    crs:BluePrimarySat="{cal["BlueSat"]}""
     crs:ConvertToGrayscale="{str(m["ConvertToGrayscale"]).lower()}"
      crs:Sharpness="{m["Sharpness"]}"
      crs:ShadowTint="{m["ShadowTint"]}"
@@ -335,7 +335,7 @@ Add missing Fuji film preset parameters    crs:RedPrimarySat="{cal["RedSat"]}"
      crs:SplitToningShadowSaturation="{m["SplitToningShadowSaturation"]}"
      crs:SplitToningHighlightHue="{m["SplitToningHighlightHue"]}"
      crs:SplitToningHighlightSaturation="{m["SplitToningHighlightSaturation"]}"
-     crs:SplitToningBalance="{m["SplitToningBalance"]}"
+     crs:SplitToningBalance="{m["SplitToningBalance"]}">
    <crs:ToneCurvePV2012>
      <rdf:li>0, 0</rdf:li>
      {tone_points_str}
