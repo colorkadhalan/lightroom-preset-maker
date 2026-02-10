@@ -100,6 +100,11 @@ class App:
         color_grading = self.calculate_color_grading(r_lab, s_lab)
         calibration = self.calculate_calibration(r_lab, s_lab)
         
+        # Detect if reference image is B&W
+        ref_is_bw = self.is_black_and_white(self.ref_img)
+        src_is_bw = self.is_black_and_white(self.src_img)
+        convert_to_grayscale = ref_is_bw and not src_is_bw  # Convert if ref is B&W but src is color
+        
         return {
             "Temperature": temp, "Tint": tint,
             "Exposure2012": round(exp, 2), "Contrast2012": contrast,
@@ -108,7 +113,8 @@ class App:
             "Texture": texture, "Clarity": clarity, "Dehaze": dehaze,
             "Vibrance": vibrance, "Saturation": saturation,
             "HSL": hsl_adjustments, "ToneCurve": tone_curve,
-            "ColorGrading": color_grading, "Calibration": calibration
+            "ColorGrading": color_grading, "Calibration": calibration,
+        "ConvertToGrayscale": convert_to_grayscale
         }
     
     def calculate_hsl(self, r_hsv, s_hsv):
@@ -178,6 +184,13 @@ class App:
         grading["Balance"] = 0
         return grading
     
+    def is_black_and_white(self, img):
+        """Detect if image is black & white by checking color saturation"""
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(np.float32)
+        avg_saturation = np.mean(hsv[:,:,1])
+        # If average saturation is very low, it's likely B&W
+        return avg_saturation < 15  # Threshold for B&W detection
+    
     def calculate_calibration(self, r_lab, s_lab):
         return {
             "RedHue": 0, "RedSat": 0,
@@ -238,6 +251,7 @@ class App:
     crs:GreenPrimarySat="{cal["GreenSat"]}"
     crs:BluePrimaryHue="{cal["BlueHue"]}"
     crs:BluePrimarySat="{cal["BlueSat"]}">
+    crs:ConvertToGrayscale="{str(m["ConvertToGrayscale"]).lower()}"
    <crs:ToneCurvePV2012>
      <rdf:li>0, 0</rdf:li>
      {tone_points_str}
