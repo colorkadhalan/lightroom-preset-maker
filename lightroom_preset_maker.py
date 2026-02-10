@@ -185,8 +185,7 @@ class App:
         return grading
     
     def is_black_and_white(self, img):
-        """Detect if image is black & white with improved precision"""        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(np.float32)
-        # Convert to HSV for saturation analysis
+        """Detect if image is black & white with improved precision"
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(np.float32)
         avg_saturation = np.mean(hsv[:,:,1])
         
