@@ -68,15 +68,58 @@ class App:
             return
         try:
             m = self.calculate_metrics()
-            uid = os.urandom(16).hex().upper()
-            xmp_content = f'<x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/" crs:PresetType="Normal" crs:UUID="{uid}" crs:HasSettings="True" crs:Exposure2012="{m["Exposure2012"]}" crs:Contrast2012="{m["Contrast2012"]}" crs:Temperature="{m["Temperature"]}" crs:Tint="{m["Tint"]}"><crs:Name><rdf:Alt><rdf:li xml:lang="x-default">Matched Style</rdf:li></rdf:Alt></crs:Name></rdf:Description></rdf:RDF></x:xmpmeta>'
+            xmp_content = f"""<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 7.0-c000 79.daa7c53, 2021/02/18-15:30:12        ">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about=""
+    xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
+   crs:PresetType="Normal"
+   crs:Cluster=""
+   crs:UUID="{os.urandom(16).hex().upper()}"
+   crs:SupportsAmount="True"
+   crs:SupportsColor="True"
+   crs:SupportsMonochrome="True"
+   crs:SupportsHighDynamicRange="True"
+   crs:SupportsNormalDynamicRange="True"
+   crs:SupportsSceneReferred="True"
+   crs:SupportsOutputReferred="True"
+   crs:CameraConfig="Camera v2"
+   crs:HasSettings="True"
+   crs:Exposure2012="{m["Exposure2012"]}"
+   crs:Contrast2012="{m["Contrast2012"]}"
+   crs:Highlights2012="0"
+   crs:Shadows2012="0"
+   crs:Whites2012="0"
+   crs:Blacks2012="0"
+   crs:Temperature="{m["Temperature"]}"
+   crs:Tint="{m["Tint"]}"
+   crs:HasCrop="False"
+   crs:AlreadyApplied="True">
+   <crs:Name>
+    <rdf:Alt>
+     <rdf:li xml:lang="x-default">Matched Style</rdf:li>
+    </rdf:Alt>
+   </crs:Name>
+   <crs:Group>
+    <rdf:Alt>
+     <rdf:li xml:lang="x-default">User Presets</rdf:li>
+    </rdf:Alt>
+   </crs:Group>
+  </rdf:Description>
+ </rdf:RDF>
+</x:xmpmeta>"""
             path = filedialog.asksaveasfilename(defaultextension=".xmp", filetypes=[("XMP files", "*.xmp")])
             if path:
-                with open(path, "wb") as f: f.write(xmp_content.encode("utf-8"))
+                with open(path, "wb") as f:
+                    f.write(b'\\xef\\xbb\\xbf') # UTF-8 BOM
+                    f.write(b'<?xpacket begin="\\ufeff" id="W5M0MpCehiHzreSzNTczkc9d"?>\
+')
+                    f.write(xmp_content.encode("utf-8"))
+                    f.write(b'\
+<?xpacket end="w"?>')
                 self.log.insert("end", f"Saved: {path}")
                 messagebox.showinfo("Success", "Preset saved successfully!")
         except Exception as e:
-            messagebox.showerror("Execution Error", str(e))
+            messagebox.showerror("Error", str(e))
 
 if __name__ == "__main__":
     root = tk.Tk()
