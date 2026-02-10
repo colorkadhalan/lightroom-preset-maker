@@ -185,12 +185,34 @@ class App:
         return grading
     
     def is_black_and_white(self, img):
-        """Detect if image is black & white by checking color saturation"""
+        """Detect if image is black & white with improved precision"""        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(np.float32)
+        # Convert to HSV for saturation analysis
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(np.float32)
         avg_saturation = np.mean(hsv[:,:,1])
-        # If average saturation is very low, it's likely B&W
-        return avg_saturation < 15  # Threshold for B&W detection
-    
+        
+        # Method 1: Average saturation check (stricter threshold)
+        saturation_check = avg_saturation < 10
+        
+        # Method 2: Percentile-based check (more robust to outliers)
+        p95_saturation = np.percentile(hsv[:,:,1], 95)
+        percentile_check = p95_saturation < 20
+        
+        # Method 3: Standard deviation check (consistent grayscale)
+        std_saturation = np.std(hsv[:,:,1])
+        std_check = std_saturation < 8
+        
+        # Method 4: RGB channel correlation (B&W has high correlation)
+        b, g, r = cv2.split(img)
+        rg_corr = np.corrcoef(r.flatten(), g.flatten())[0,1]
+        rb_corr = np.corrcoef(r.flatten(), b.flatten())[0,1]
+        gb_corr = np.corrcoef(g.flatten(), b.flatten())[0,1]
+        correlation_check = (rg_corr > 0.98 and rb_corr > 0.98 and gb_corr > 0.98)
+        
+        # Combine multiple methods for higher precision
+        # Image is B&W if it passes saturation AND (percentile OR correlation)
+        is_bw = saturation_check and (percentile_check or correlation_check)
+        
+        return is_bw
     def calculate_calibration(self, r_lab, s_lab):
         return {
             "RedHue": 0, "RedSat": 0,
