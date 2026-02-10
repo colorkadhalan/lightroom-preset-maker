@@ -336,8 +336,8 @@ class App:
      crs:SplitToningHighlightSaturation="{m["SplitToningHighlightSaturation"]}"
      crs:SplitToningBalance="{m["SplitToningBalance"]}">
      <crs:ToneCurvePV2012>
-       <rdf:li>255, 255</rdf:li>
-      </rdf:Seq>
+                     <rdf:Seq>
+                {tone_points_str}      </rdf:Seq>
   </rdf:Description>
  </rdf:RDF>
 </x:xmpmeta>"""
