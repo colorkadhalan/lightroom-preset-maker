@@ -135,7 +135,28 @@ class App:
             "Vibrance": vibrance, "Saturation": saturation,
             "HSL": hsl_adjustments, "ToneCurve": tone_curve,
             "ColorGrading": color_grading, "Calibration": calibration,
-        "ConvertToGrayscale": convert_to_grayscale
+        "ConvertToGrayscale": convert_to_grayscale,
+        # Missing Fuji-style parameters
+        "Sharpness": 25,  # Default sharpness
+        "ShadowTint": 0,  # Shadow color tint
+        "GrainAmount": 0,  # Film grain amount (0-100)
+        "GrainSize": 25,  # Grain size (0-100)
+        "GrainFrequency": 50,  # Grain roughness (0-100)
+        "SharpenRadius": 1.0,  # Sharpening radius (0.5-3.0)
+        "SharpenDetail": 25,  # Detail amount (0-100)
+        "SharpenEdgeMasking": 0,  # Edge masking (0-100)
+        "ParametricShadows": 0,  # Parametric shadows (-100 to 100)
+        "ParametricDarks": 0,  # Parametric darks (-100 to 100)
+        "ParametricLights": 0,  # Parametric lights (-100 to 100)
+        "ParametricHighlights": 0,  # Parametric highlights (-100 to 100)
+        "ParametricShadowSplit": 25,  # Shadow split point (0-100)
+        "ParametricMidtoneSplit": 50,  # Midtone split point (0-100)
+        "ParametricHighlightSplit": 75,  # Highlight split point (0-100)
+        "SplitToningShadowHue": 0,  # Split toning shadow hue (0-360)
+        "SplitToningShadowSaturation": 0,  # Split toning shadow sat (0-100)
+        "SplitToningHighlightHue": 0,  # Split toning highlight hue (0-360)
+        "SplitToningHighlightSaturation": 0,  # Split toning highlight sat (0-100)
+        "SplitToningBalance": 0  # Split toning balance (-100 to 100)
         }
     
     def calculate_hsl(self, r_hsv, s_hsv):
@@ -287,13 +308,32 @@ class App:
     crs:ColorGradeHighlightsHue="{cg["Highlights"]["Hue"]}"
     crs:ColorGradeHighlightsSat="{cg["Highlights"]["Sat"]}"
     crs:ColorGradeBalance="{cg["Balance"]}"
-    crs:RedPrimaryHue="{cal["RedHue"]}"
-    crs:RedPrimarySat="{cal["RedSat"]}"
+Add missing Fuji film preset parameters    crs:RedPrimarySat="{cal["RedSat"]}"
     crs:GreenPrimaryHue="{cal["GreenHue"]}"
     crs:GreenPrimarySat="{cal["GreenSat"]}"
     crs:BluePrimaryHue="{cal["BlueHue"]}"
     crs:BluePrimarySat="{cal["BlueSat"]}">
     crs:ConvertToGrayscale="{str(m["ConvertToGrayscale"]).lower()}"
+     crs:Sharpness="{m["Sharpness"]}"
+     crs:ShadowTint="{m["ShadowTint"]}"
+     crs:GrainAmount="{m["GrainAmount"]}"
+     crs:GrainSize="{m["GrainSize"]}"
+     crs:GrainFrequency="{m["GrainFrequency"]}"
+     crs:SharpenRadius="{m["SharpenRadius"]}"
+     crs:SharpenDetail="{m["SharpenDetail"]}"
+     crs:SharpenEdgeMasking="{m["SharpenEdgeMasking"]}"
+     crs:ParametricShadows="{m["ParametricShadows"]}"
+     crs:ParametricDarks="{m["ParametricDarks"]}"
+     crs:ParametricLights="{m["ParametricLights"]}"
+     crs:ParametricHighlights="{m["ParametricHighlights"]}"
+     crs:ParametricShadowSplit="{m["ParametricShadowSplit"]}"
+     crs:ParametricMidtoneSplit="{m["ParametricMidtoneSplit"]}"
+     crs:ParametricHighlightSplit="{m["ParametricHighlightSplit"]}"
+     crs:SplitToningShadowHue="{m["SplitToningShadowHue"]}"
+     crs:SplitToningShadowSaturation="{m["SplitToningShadowSaturation"]}"
+     crs:SplitToningHighlightHue="{m["SplitToningHighlightHue"]}"
+     crs:SplitToningHighlightSaturation="{m["SplitToningHighlightSaturation"]}"
+     crs:SplitToningBalance="{m["SplitToningBalance"]}"
    <crs:ToneCurvePV2012>
      <rdf:li>0, 0</rdf:li>
      {tone_points_str}
