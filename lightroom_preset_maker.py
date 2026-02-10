@@ -278,8 +278,7 @@ class App:
                 hsl_xml += f'    crs:LuminanceAdjustment{color}="{vals["Luminance"]}"\n'
             
             # Build Tone Curve with proper spacing
-            tone_points_str = "\n     ".join([f"<rdf:li>{p[0]}, {p[1]}</rdf:li>" for p in m["ToneCurve"]])
-            
+        tone_points_str = "\n       ".join([f"<rdf:li>{p[0]}, {p[1]}</rdf:li>" for p in m["ToneCurve"]])            
             # Color Grading
             cg = m["ColorGrading"]
             
@@ -336,11 +335,9 @@ class App:
      crs:SplitToningHighlightHue="{m["SplitToningHighlightHue"]}"
      crs:SplitToningHighlightSaturation="{m["SplitToningHighlightSaturation"]}"
      crs:SplitToningBalance="{m["SplitToningBalance"]}">
-   <crs:ToneCurvePV2012>
-     <rdf:li>0, 0</rdf:li>
-     {tone_points_str}
-     <rdf:li>255, 255</rdf:li>
-   </crs:ToneCurvePV2012>
+     <crs:ToneCurvePV2012>
+       <rdf:li>255, 255</rdf:li>
+      </rdf:Seq>
   </rdf:Description>
  </rdf:RDF>
 </x:xmpmeta>"""
