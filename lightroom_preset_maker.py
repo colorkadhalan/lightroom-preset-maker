@@ -56,10 +56,31 @@ class App:
         r_hsv = cv2.cvtColor(self.ref_img, cv2.COLOR_BGR2HSV).astype(np.float32)
         s_hsv = cv2.cvtColor(self.src_img, cv2.COLOR_BGR2HSV).astype(np.float32)
         
-        exp = (np.mean(r_lab[:,:,0]) - np.mean(s_lab[:,:,0])) / 50.0
-        r_std = np.std(r_lab[:,:,0])
-        s_std = np.std(s_lab[:,:,0])
-        contrast = int((r_std / (s_std + 1e-6) - 1.0) * 100)
+        # Enhanced exposure calculation with histogram analysis
+        r_mean_lum = np.mean(r_lab[:,:,0])
+        s_mean_lum = np.mean(s_lab[:,:,0])
+        
+        # Zone-based exposure for better accuracy
+        r_midtones = np.mean(r_lab[(r_lab[:,:,0] > 85) & (r_lab[:,:,0] < 170)])
+        s_midtones = np.mean(s_lab[(s_lab[:,:,0] > 85) & (s_lab[:,:,0] < 170)])
+        
+        # Weighted exposure: 60% midtones, 40% overall
+        if not np.isnan(r_midtones) and not np.isnan(s_midtones):
+            exp = (0.6 * (r_midtones - s_midtones) + 0.4 * (r_mean_lum - s_mean_lum)) / 50.0
+        else:
+            exp = (r_mean_lum - s_mean_lum) / 50.0
+        # Enhanced contrast with tonal range analysis        s_std = np.std(s_lab[:,:,0])
+                # Calculate tonal range (dynamic range)
+        r_range = np.percentile(r_lab[:,:,0], 95) - np.percentile(r_lab[:,:,0], 5)
+        s_range = np.percentile(s_lab[:,:,0], 95) - np.percentile(s_lab[:,:,0], 5)
+        
+        # Combined standard deviation and range-based contrast
+        std_contrast_ratio = r_std / (s_std + 1e-6)
+        range_contrast_ratio = r_range / (s_range + 1e-6)
+        
+        # Weighted combination: 70% std, 30% range
+        contrast_ratio = 0.7 * std_contrast_ratio + 0.3 * range_contrast_ratio
+        contrast = int((contrast_ratio - 1.0) * 100)
         contrast = max(-100, min(100, contrast))
         
         temp = int((np.mean(r_lab[:,:,2]) - np.mean(s_lab[:,:,2])) * 0.5)
